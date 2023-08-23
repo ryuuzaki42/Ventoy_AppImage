@@ -1,0 +1,102 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - "**"
+    tags:
+      - "!**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+          - uses: actions/checkout@main
+          - name: Install fuse and libfuse2
+            run: |
+              sudo apt install fuse libfuse2
+
+          - name: Get appimagetool
+            run: |
+              set -x
+              cd ..
+              wget https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage
+              chmod +x appimagetool-x86_64.AppImage
+              pwd
+              ls -lah
+
+          - name: Get Ventoy
+            run: |
+              set -x
+              version=$(grep -o "Ventoy:.*" README.md | cut -d ' ' -f2)
+              echo "Ventoy version: $version"
+
+              wget "https://github.com/ventoy/Ventoy/releases/download/v$version/ventoy-$version-linux.tar.gz"
+              tar -xvf "ventoy-$version-linux.tar.gz"
+
+          - name: Make Appimage
+            run: |
+              set -x
+              version=$(grep -o "Ventoy:.*" README.md | cut -d ' ' -f2)
+              echo "Ventoy version: $version"
+
+              cat > AppRun << 'EOF'
+              #!/bin/bash
+              HERE="$(dirname "$(readlink -f "${0}")")"
+              EXEC="${HERE}/ventoy/VentoyGUI.x86_64"
+              exec "${EXEC}"
+              EOF
+
+              sed -i "s/ventoy/ventoy-$version/" AppRun
+              chmod +x AppRun
+              cat AppRun
+
+              cat > Ventoy.desktop << 'EOF'
+              [Desktop Entry]
+              Name=Ventoy
+              Exec=VentoyGUI.x86_64
+              Icon=Ventoy
+              Type=Application
+              Categories=Utility
+              EOF
+
+              chmod +x Ventoy.desktop
+              sed -i "s/Name=Ventoy/Name=Ventoy-$version/" Ventoy.desktop
+              cat Ventoy.desktop
+
+              ln -s ventoy-$version/WebUI/static/img/VentoyLogo.png Ventoy.png
+              ls -lah
+
+              rm -v "ventoy-$version-linux.tar.gz"
+              rm -vr .git/ .github/
+              ls -lah
+
+              cd ../
+              ls -lah
+              ARCH=x86_64 ./appimagetool-x86_64.AppImage Ventoy_AppImage/
+
+              fileName=$(ls Ventoy*.AppImage)
+              echo "fileName: $fileName"
+              mv "$fileName" "Ventoy-$version-x86_64-1_JB.AppImage"
+              md5sum "Ventoy-$version-x86_64-1_JB.AppImage" > "Ventoy-$version-x86_64-1_JB.AppImage.md5"
+              ls -lah
+
+              mv Ventoy*.AppImage Ventoy*.AppImage.md5 Ventoy_AppImage/
+              ls -lah Ventoy_AppImage/
+
+          # Build - Error: Resource not accessible by integration
+          # Change Settings -> Actions -> General -> Workflow Permissions to allow read and write:
+          # https://github.com/actions/first-interaction/issues/10#issuecomment-1506118886
+
+          # https://github.com/marketplace/actions/upload-to-github-release
+          - uses: xresloader/upload-to-github-release@main
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            with:
+              file: "Ventoy*.AppImage; Ventoy*.md5"
+              #delete_file: "random-name-*.txt;random-*.txt"
+              release_id: ${{ steps.create_release.outputs.id }}
+              #overwrite: true
+              verbose: true
+              #tags: true
+              draft: false
