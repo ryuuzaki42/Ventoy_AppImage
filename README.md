@@ -1,7 +1,7 @@
 # Ventoy_AppImage
 
 ## Repository: https://github.com/ryuuzaki42/Ventoy_AppImage
-     Ventoy: 1.0.94
+     Ventoy: 1.0.95
 
 ### Run it as root:
     su
