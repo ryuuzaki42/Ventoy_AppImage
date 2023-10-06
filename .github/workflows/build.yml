@@ -100,5 +100,5 @@ jobs:
               verbose: true
               #tags: true
               draft: false
-              default_release_name: "Ventoy-v"
+              default_release_name: "Ventoy v"
 
