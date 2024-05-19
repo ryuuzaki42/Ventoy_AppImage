@@ -34,7 +34,6 @@ jobs:
 
               wget "https://github.com/ventoy/Ventoy/releases/download/v$version/ventoy-$version-linux.tar.gz"
               tar -xvf "ventoy-$version-linux.tar.gz"
-              chmod 777 ventoy-$version/
 
           - name: Make Appimage
             run: |
