@@ -19,8 +19,9 @@ jobs:
           - name: Get appimagetool
             run: |
               set -x
-              cd ..
-              wget https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage
+              cd ../
+              #wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
+              wget -q https://github.com/probonopd/go-appimage/releases/download/continuous/appimagetool-831-x86_64.AppImage -O appimagetool-x86_64.AppImage
               chmod +x appimagetool-x86_64.AppImage
               pwd
               ls -lah
