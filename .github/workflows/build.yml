@@ -49,7 +49,7 @@ jobs:
               exec "${EXEC}"
               EOF
 
-              #sed -i "s/ventoy/ventoy-$version/" AppRun
+              sed -i "s/ventoy/ventoy-$version/" AppRun
               chmod +x AppRun
               cat AppRun
 
@@ -62,8 +62,8 @@ jobs:
               Categories=Utility
               EOF
 
+              sed -i "s/Name=Ventoy/Name=Ventoy-$version/" Ventoy.desktop
               chmod +x Ventoy.desktop
-              #sed -i "s/Name=Ventoy/Name=Ventoy-$version/" Ventoy.desktop
               cat Ventoy.desktop
 
               ln -s ventoy-$version/WebUI/static/img/VentoyLogo.png Ventoy.png
