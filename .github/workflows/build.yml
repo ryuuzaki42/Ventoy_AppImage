@@ -45,7 +45,7 @@ jobs:
               cat > AppRun << 'EOF'
               #!/bin/bash
               HERE="$(dirname "$(readlink -f "${0}")")"
-              EXEC="${HERE}/ventoy-$version/VentoyGUI.x86_64"
+              EXEC="${HERE}/ventoy/VentoyGUI.x86_64"
               exec "${EXEC}"
               EOF
 
@@ -55,7 +55,7 @@ jobs:
 
               cat > Ventoy.desktop << 'EOF'
               [Desktop Entry]
-              Name=Ventoy-$version
+              Name=Ventoy
               Exec=VentoyGUI.x86_64
               Icon=Ventoy
               Type=Application
@@ -103,4 +103,3 @@ jobs:
               #tags: true
               draft: false
               default_release_name: "Ventoy V in AppImage"
-
