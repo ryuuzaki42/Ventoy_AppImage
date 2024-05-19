@@ -34,6 +34,7 @@ jobs:
 
               wget "https://github.com/ventoy/Ventoy/releases/download/v$version/ventoy-$version-linux.tar.gz"
               tar -xvf "ventoy-$version-linux.tar.gz"
+              chmod 777 ventoy-$version/
 
           - name: Make Appimage
             run: |
@@ -44,17 +45,17 @@ jobs:
               cat > AppRun << 'EOF'
               #!/bin/bash
               HERE="$(dirname "$(readlink -f "${0}")")"
-              EXEC="${HERE}/ventoy/VentoyGUI.x86_64"
+              EXEC="${HERE}/ventoy-$version/VentoyGUI.x86_64"
               exec "${EXEC}"
               EOF
 
-              sed -i "s/ventoy/ventoy-$version/" AppRun
+              #sed -i "s/ventoy/ventoy-$version/" AppRun
               chmod +x AppRun
               cat AppRun
 
               cat > Ventoy.desktop << 'EOF'
               [Desktop Entry]
-              Name=Ventoy
+              Name=Ventoy-$version
               Exec=VentoyGUI.x86_64
               Icon=Ventoy
               Type=Application
@@ -62,7 +63,7 @@ jobs:
               EOF
 
               chmod +x Ventoy.desktop
-              sed -i "s/Name=Ventoy/Name=Ventoy-$version/" Ventoy.desktop
+              #sed -i "s/Name=Ventoy/Name=Ventoy-$version/" Ventoy.desktop
               cat Ventoy.desktop
 
               ln -s ventoy-$version/WebUI/static/img/VentoyLogo.png Ventoy.png
