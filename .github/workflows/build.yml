@@ -21,7 +21,9 @@ jobs:
               set -x
               cd ../
               #wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
-              wget -q https://github.com/probonopd/go-appimage/releases/download/continuous/appimagetool-831-x86_64.AppImage -O appimagetool-x86_64.AppImage
+              version_go_appimage=$(wget -q -O - https://api.github.com/repos/probonopd/go-appimage/releases | grep "\"name.*appimagetool-.*-x86_64.AppImage\"" | head -n 1 | cut -d '-' -f2)
+              echo "version_go_appimage: $version_go_appimage"
+              wget -q "https://github.com/probonopd/go-appimage/releases/download/continuous/appimagetool-$version_go_appimage-x86_64.AppImage" -O appimagetool-x86_64.AppImage
               chmod +x appimagetool-x86_64.AppImage
               pwd
               ls -lah
