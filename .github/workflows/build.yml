@@ -96,7 +96,7 @@ jobs:
             env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             with:
-              file: "Ventoy*.AppImage; Ventoy*.md5"
+              file: "Ventoy*.AppImage; Ventoy*.zsync ; Ventoy*.md5"
               #delete_file: "random-name-*.txt;random-*.txt"
               release_id: ${{ steps.create_release.outputs.id }}
               #overwrite: true
