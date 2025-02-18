@@ -63,7 +63,7 @@ jobs:
               Categories=Utility
               EOF
 
-              sed -i "s/Name=Ventoy/Name=Ventoy-$version/" Ventoy.desktop
+              #sed -i "s/Name=Ventoy/Name=Ventoy-$version/" Ventoy.desktop
               chmod +x Ventoy.desktop
               cat Ventoy.desktop
 
@@ -76,12 +76,13 @@ jobs:
 
               cd ../
               ls -lah
-              ARCH=x86_64 ./appimagetool-x86_64.AppImage Ventoy_AppImage/
+              ARCH=x86_64 VERSION="${version}-1_JB" ./appimagetool-x86_64.AppImage Ventoy_AppImage/
 
               fileName=$(ls Ventoy*.AppImage)
               echo "fileName: $fileName"
-              mv "$fileName" "Ventoy-$version-x86_64-1_JB.AppImage"
-              md5sum "Ventoy-$version-x86_64-1_JB.AppImage" > "Ventoy-$version-x86_64-1_JB.AppImage.md5"
+              #mv "$fileName" "Ventoy-$version-x86_64-1_JB.AppImage"
+              #md5sum "Ventoy-$version-x86_64-1_JB.AppImage" > "Ventoy-$version-x86_64-1_JB.AppImage.md5"
+              md5sum "$fileName" > "${fileName}.md5"
               ls -lah
 
               mv Ventoy*.AppImage Ventoy*.zsync Ventoy*.md5 Ventoy_AppImage/
