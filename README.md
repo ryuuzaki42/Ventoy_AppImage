@@ -5,15 +5,15 @@
 
 ### Run it as root:
     su
-    ./Ventoy-*-x86_64-1_JB.AppImage
+    ./Ventoy-*-1_JB-x86_64.AppImage
 
 Or:
 
-    sudo ./Ventoy-*-x86_64-1_JB.AppImage
+    sudo ./Ventoy-*-1_JB-x86_64.AppImage
 
 If use KDE:
 
-    kdesu ./Ventoy-*-x86_64-1_JB.AppImage
+    kdesu ./Ventoy-*-1_JB-x86_64.AppImage
 
 ---
 Based on: https://github.com/stupid-kid-af/Ventoy-AppImage
