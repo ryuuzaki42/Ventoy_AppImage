@@ -45,6 +45,12 @@ jobs:
 
               cat > AppRun << 'EOF'
               #!/bin/bash
+              if [ "$(id -u)" != "0" ]; then
+                  echo -e "\n # Please run this AppImage using root! #"
+                  echo -e " - Check the README.md file for more information -\n"
+                  exit 1
+              fi
+
               HERE="$(dirname "$(readlink -f "${0}")")"
               EXEC="${HERE}/ventoy/VentoyGUI.x86_64"
               exec "${EXEC}"
