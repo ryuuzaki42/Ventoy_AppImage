@@ -59,20 +59,16 @@ jobs:
               chmod +x AppRun
               cat AppRun
 
-              cat > Ventoy.desktop << 'EOF'
-              [Desktop Entry]
+              echo '[Desktop Entry]
               Name=Ventoy
               Exec=VentoyGUI.x86_64
               Icon=Ventoy
               Type=Application
-              Categories=Utility
-              EOF
-
-              #sed -i "s/Name=Ventoy/Name=Ventoy-$version/" Ventoy.desktop
+              Categories=Utility' > Ventoy.desktop
               chmod +x Ventoy.desktop
               cat Ventoy.desktop
 
-              ln -s ventoy-$version/WebUI/static/img/VentoyLogo.png Ventoy.png
+              cp ventoy-$version/WebUI/static/img/VentoyLogo.png Ventoy.png
               pwd; ls -lah
 
               rm -v "ventoy-$version-linux.tar.gz"
