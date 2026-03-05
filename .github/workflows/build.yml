@@ -13,8 +13,7 @@ jobs:
     steps:
           - uses: actions/checkout@main
           - name: Install fuse and libfuse2
-            run: |
-              sudo apt install fuse libfuse2
+            run: sudo apt install fuse libfuse2
 
           - name: Get appimagetool
             run: |
@@ -44,7 +43,7 @@ jobs:
 
               echo '#!/bin/bash
               if [ "$(id -u)" != "0" ]; then
-                  echo -e "\n # Please run this AppImage using root! #"
+                  echo -e "\n # Please run this AppImage as root! #"
                   echo -e " - Check the README.md file for more information -\n"
                   exit 1
               fi
@@ -74,8 +73,8 @@ jobs:
               pwd; ls -lah
 
               cd ../
-              pwd; ls -lah
               ARCH=x86_64 VERSION="${version}-1_JB" ./appimagetool-x86_64.AppImage Ventoy_AppImage/
+              pwd; ls -lah
 
               fileName=$(ls Ventoy*.AppImage)
               echo "fileName: $fileName"
