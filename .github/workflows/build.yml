@@ -25,8 +25,7 @@ jobs:
               echo "version_go_appimage: $version_go_appimage"
               wget -q "https://github.com/probonopd/go-appimage/releases/download/continuous/appimagetool-$version_go_appimage-x86_64.AppImage" -O appimagetool-x86_64.AppImage
               chmod +x appimagetool-x86_64.AppImage
-              pwd
-              ls -lah
+              pwd; ls -lah
 
           - name: Get Ventoy
             run: |
@@ -74,29 +73,24 @@ jobs:
               cat Ventoy.desktop
 
               ln -s ventoy-$version/WebUI/static/img/VentoyLogo.png Ventoy.png
-              ls -lah
+              pwd; ls -lah
 
               rm -v "ventoy-$version-linux.tar.gz"
               rm -vr .git/ .github/
-              ls -lah
+              pwd; ls -lah
 
               cd ../
-              ls -lah
+              pwd; ls -lah
               ARCH=x86_64 VERSION="${version}-1_JB" ./appimagetool-x86_64.AppImage Ventoy_AppImage/
 
               fileName=$(ls Ventoy*.AppImage)
               echo "fileName: $fileName"
-              #mv "$fileName" "Ventoy-$version-x86_64-1_JB.AppImage"
               #md5sum "Ventoy-$version-x86_64-1_JB.AppImage" > "Ventoy-$version-x86_64-1_JB.AppImage.md5"
               md5sum "$fileName" > "${fileName}.md5"
-              ls -lah
+              pwd; ls -lah
 
               mv Ventoy*.AppImage Ventoy*.zsync Ventoy*.md5 Ventoy_AppImage/
               ls -lah Ventoy_AppImage/
-
-          # Build - Error: Resource not accessible by integration
-          # Change Settings -> Actions -> General -> Workflow Permissions to allow read and write:
-          # https://github.com/actions/first-interaction/issues/10#issuecomment-1506118886
 
           # https://github.com/marketplace/actions/upload-to-github-release
           - uses: xresloader/upload-to-github-release@main
