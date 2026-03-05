@@ -1,4 +1,4 @@
-name: Release
+name: Create new release
 
 on:
   push:
@@ -42,8 +42,7 @@ jobs:
               version=$(grep -o "Ventoy:.*" README.md | cut -d ' ' -f2)
               echo "Ventoy version: $version"
 
-              cat > AppRun << 'EOF'
-              #!/bin/bash
+              echo '#!/bin/bash
               if [ "$(id -u)" != "0" ]; then
                   echo -e "\n # Please run this AppImage using root! #"
                   echo -e " - Check the README.md file for more information -\n"
@@ -52,8 +51,7 @@ jobs:
 
               HERE="$(dirname "$(readlink -f "${0}")")"
               EXEC="${HERE}/ventoy/VentoyGUI.x86_64"
-              exec "${EXEC}"
-              EOF
+              exec "${EXEC}"' > AppRun
 
               sed -i "s/ventoy/ventoy-$version/" AppRun
               chmod +x AppRun
@@ -68,7 +66,7 @@ jobs:
               chmod +x Ventoy.desktop
               cat Ventoy.desktop
 
-              cp ventoy-$version/WebUI/static/img/VentoyLogo.png Ventoy.png
+              ln -s ventoy-$version/WebUI/static/img/VentoyLogo.png Ventoy.png
               pwd; ls -lah
 
               rm -v "ventoy-$version-linux.tar.gz"
