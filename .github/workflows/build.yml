@@ -54,7 +54,7 @@ jobs:
               echo '#!/bin/bash
               HERE="$(dirname "$(readlink -f "${0}")")"
               if [ "$(id -u)" != "0" ]; then
-                  echo -e "\n # Error - Run this AppImage as root! #"
+                  echo -e "\n # Error - Run this AppImage as root! #\n"
                   set -x
                   cat "$HERE/README.md"
                   exit 1
