@@ -47,16 +47,18 @@ jobs:
               tag=1 #1
               version=$(grep -o "Ventoy:.*" README.md | cut -d ' ' -f2)
               echo "Ventoy version: $version - Tag: $tag"
+
+              cp README.md squashfs-root/
               cd squashfs-root/
 
               echo '#!/bin/bash
+              HERE="$(dirname "$(readlink -f "${0}")")"
               if [ "$(id -u)" != "0" ]; then
                   echo -e "\n # Please run this AppImage as root! #\n"
-                  cat README.md
+                  cat "$HERE/README.md"
                   exit 1
               fi
 
-              HERE="$(dirname "$(readlink -f "${0}")")"
               EXEC="${HERE}/ventoy/VentoyGUI.x86_64"
               exec "${EXEC}"' > AppRun
 
@@ -85,7 +87,6 @@ jobs:
               md5sum "$fileName" > "${fileName}.md5"
               pwd; ls -lah
 
-          # https://github.com/marketplace/actions/upload-to-github-release
           - uses: xresloader/upload-to-github-release@v1
             env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
