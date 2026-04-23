@@ -11,6 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     #runs-on: ubuntu-latest
+
     steps:
           - uses: actions/checkout@v6
           - name: Install fuse and libfuse2
@@ -19,8 +20,6 @@ jobs:
           - name: Get appimagetool
             run: |
               set -x
-              cd ../
-              #wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
               version_go_appimage=$(wget -q -O - https://api.github.com/repos/probonopd/go-appimage/releases | grep "\"name.*appimagetool-.*-x86_64.AppImage\"" | head -n 1 | cut -d '-' -f2)
               echo "version_go_appimage: $version_go_appimage"
               wget -q "https://github.com/probonopd/go-appimage/releases/download/continuous/appimagetool-$version_go_appimage-x86_64.AppImage" -O appimagetool-x86_64.AppImage
@@ -32,20 +31,28 @@ jobs:
               set -x
               version=$(grep -o "Ventoy:.*" README.md | cut -d ' ' -f2)
               echo "Ventoy version: $version"
+              
+              mkdir squashfs-root/
+              cd squashfs-root/
 
               wget "https://github.com/ventoy/Ventoy/releases/download/v$version/ventoy-$version-linux.tar.gz"
               tar -xvf "ventoy-$version-linux.tar.gz"
 
+              rm -v "ventoy-$version-linux.tar.gz"
+              pwd; ls -lah
+
           - name: Make Appimage
             run: |
               set -x
+              tag=1 #1
               version=$(grep -o "Ventoy:.*" README.md | cut -d ' ' -f2)
-              echo "Ventoy version: $version"
+              echo "Ventoy version: $version - Tag: $tag"
+              cd squashfs-root/
 
               echo '#!/bin/bash
               if [ "$(id -u)" != "0" ]; then
-                  echo -e "\n # Please run this AppImage as root! #"
-                  echo -e " - Check the README.md file for more information -\n"
+                  echo -e "\n # Please run this AppImage as root! #\n"
+                  cat README.md
                   exit 1
               fi
 
@@ -69,22 +76,14 @@ jobs:
               ln -s ventoy-$version/WebUI/static/img/VentoyLogo.png Ventoy.png
               pwd; ls -lah
 
-              rm -v "ventoy-$version-linux.tar.gz"
-              rm -vr .git/ .github/
-              pwd; ls -lah
-
               cd ../
-              ARCH=x86_64 VERSION="${version}-1_JB" ./appimagetool-x86_64.AppImage Ventoy_AppImage/
+              ARCH=x86_64 VERSION="${version}-1_JB" ./appimagetool-x86_64.AppImage squashfs-root/
               pwd; ls -lah
 
               fileName=$(ls Ventoy*.AppImage)
               echo "fileName: $fileName"
-              #md5sum "Ventoy-$version-x86_64-1_JB.AppImage" > "Ventoy-$version-x86_64-1_JB.AppImage.md5"
               md5sum "$fileName" > "${fileName}.md5"
               pwd; ls -lah
-
-              mv Ventoy*.AppImage Ventoy*.zsync Ventoy*.md5 Ventoy_AppImage/
-              ls -lah Ventoy_AppImage/
 
           # https://github.com/marketplace/actions/upload-to-github-release
           - uses: xresloader/upload-to-github-release@v1
