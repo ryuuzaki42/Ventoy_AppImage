@@ -19,6 +19,16 @@ https://www.ventoy.net/en/index.html
     kdesu ./Ventoy-*_JB-x86_64.AppImage
 
 ---
+### Errors
+1. cannot open display: :1 - https://github.com/ryuuzaki42/Ventoy_AppImage/issues/5
+
+   Try:
+
+        xhost +SI:localuser:root
+
+    Or: https://github.com/ryuuzaki42/Ventoy_AppImage/issues/5#issuecomment-5132052855
+
+---
 Based on: https://github.com/stupid-kid-af/Ventoy-AppImage
 
 ---
